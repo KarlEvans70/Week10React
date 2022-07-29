@@ -1,65 +1,26 @@
-import { useState, useEffect } from 'react';
-import './App.css';
-import Box from "./box";
+import { useState } from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Login from "./pages/login";
+import Home from "./pages/home";
+import Feed from "./pages/feed";
+import Profile from "./pages/profile";
+import "./App.css";
 
 const App = () => {
-  const [user, setUser] = useState("Steve");
-  const [photos, setPhotos] = useState([]);
-
-  const arr = [{ name: "Steve" }, { name: "Gary" }, { name: "Tony" }, { name: "Kevin" }]; 
-
-  const fetchImages = async () => {
-    const response = await fetch("https://picsum.photos/v2/list");
-    const data = await response.json();
-    setPhotos(data);
-  };
-
-  useEffect(() => {
-    fetchImages();
-  }, [user]); //everytime user's value changes, useEffect will run again
-
-
-  // for(let i = 0; i < arr.length; i++) {
-  //   console.log(arr[i]);
-  // };
-
-  // instead of doing the above you can do the below
-
-  // arr.map((item, index) => {
-  //   console.log(item.name)
-  // })
-
-  // const useState = (initialVal) => {
-  //   let state = initialVal;
-
-  //   const setState = (newVal) => {
-  //     state = newVal
-  //   }
-
-  //   return [state, setState];
-  // }
+  const [user, setUser] = useState();
 
   return (
-    <div className="App">
-      {photos.map((item, index) => {
-        return(
-          <div>
-            <img src={item.download_url} />
-          </div>
-        )
-      })}
-      {/* <Box name={user} />
-      {arr.map((item, i) => {
-        return (
-          <div>
-            <Box name={item.name} />
-        ) </div>
-        );
-      })}
-      <input onChange={(event) => setUser(event.target.value)} />
-      {user && <Box name="Tony" />}
-      {user ? <Box name="Jeff" /> : <Box name="Not Jeff" />} */}
-    </div>
+    <BrowserRouter className="App">
+      <Routes>
+        <Route path="/" element={<Login setter={setUser} user={user} />} />
+        <Route path="/home" element={<Home user={user} />} />
+        <Route path="/feed" element={<Feed user={user} />} />
+        <Route
+          path="/profile"
+          element={<Profile setter={setUser} user={user} />}
+        />
+      </Routes>
+    </BrowserRouter>
   );
 };
 
